@@ -1,34 +1,5 @@
 ---
-- name: Download & unarchive the Dropbox bundle
-  unarchive:
-    remote_src: "yes"
-    src: "{{ dropbox_download_url }}"
-    dest: "~{{ dropbox_install_user }}/"
-
-- block:
-  - name: Run the daemon (install)
-    shell: ~{{dropbox_install_user}}/.dropbox-dist/dropboxd 2>&1 > /tmp/ansible-dropbox-install-link
-    args:
-      creates: "~{{dropbox_install_user}}/Dropbox/"
-    async: 180
-    poll: 0
-
-  - name: Wait for dropboxd to write to file
-    wait_for:
-      path: /tmp/ansible-dropbox-install-link
-      search_regex: "nonce"
-      timeout: 15
-
-  - name: Learn Dropbox Account-Link URL
-    shell: cat /tmp/ansible-dropbox-install-link
-    register: inst_link
-
-  - name: Remove account-link tmpfile
-    file:
-      path: /tmp/ansible-dropbox-install-link
-      state: "absent"
-
-  - name: "** VISIT THIS URL WITHIN 3 MINUTES TO CONNECT A DROPBOX ACCOUNT TO THIS HOST **"
-    debug:
-      msg: "{{ inst_link.stdout_lines[1] | default('NONE FOUND') }}"
-  when: ansible_check_mode == false
+- include_tasks: do-install.yml
+  loop: "{{ dropbox_install_users }}"
+  loop_control:
+    loop_var: dropbox_install_user
