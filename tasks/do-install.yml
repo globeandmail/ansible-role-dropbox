@@ -26,7 +26,7 @@
       path: ~/tmp-ansible-dropbox-install-link_{{dropbox_install_user}}
       state: "absent"
 
-  - name: "(user {{dropbox_install_user}}) - ** VISIT THIS URL WITHIN 3 MINUTES TO CONNECT A DROPBOX ACCOUNT TO THIS USER@HOST **"
+  - name: "(user {{dropbox_install_user}}) - ** LOG IN TO THIS URL WITHIN 3 MINUTES TO CONNECT THE DROPBOX ACCOUNT TO {{dropbox_install_user}}@{{ansible_hostname}} **"
     debug:
       msg: "{{ inst_link.stdout_lines[1] | default('NONE FOUND') }}"
     when: (inst_link.stdout_lines | default([])) | length > 0
