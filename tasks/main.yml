@@ -7,6 +7,13 @@
   - "libglapi-mesa"
   - "libxdamage1"
   - "libxfixes3"
+  - "libxcb-glx0"
+  - "libxcb-dri2-0"
+  - "libxcb-dri3-0"
+  - "libxcb-present0"
+  - "libxcb-sync1"
+  - "libxshmfence1"
+  - "libxxf86vm1"
 
 - include_tasks: do-install.yml
   loop: "{{ dropbox_install_users }}"
