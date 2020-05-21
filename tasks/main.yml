@@ -6,6 +6,7 @@
   loop:
   - "libglapi-mesa"
   - "libxdamage1"
+  - "libxfixes3"
 
 - include_tasks: do-install.yml
   loop: "{{ dropbox_install_users }}"
