@@ -1,3 +1,8 @@
+- name: Check if Dropbox is already there
+  stat:
+    path: "~{{dropbox_install_user}}/Dropbox"
+  register: dbox_inst
+
 - block:
   - name: (user {{dropbox_install_user}}) - Download & unarchive the Dropbox bundle
     unarchive:
@@ -30,6 +35,6 @@
     debug:
       msg: "{{ inst_link.stdout_lines[1] | default('NONE FOUND') }}"
     when: (inst_link.stdout_lines | default([])) | length > 0
-  when: ansible_check_mode == false
+  when: (ansible_check_mode == false) and (not dbox_inst.stat.exists)
   become: "yes"
   become_user: "{{dropbox_install_user}}"
