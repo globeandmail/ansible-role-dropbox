@@ -1,4 +1,9 @@
 ---
+- name: Install req'd dependency
+  apt:
+    name: "libglapi-mesa"
+    state: "present"
+
 - include_tasks: do-install.yml
   loop: "{{ dropbox_install_users }}"
   loop_control:
