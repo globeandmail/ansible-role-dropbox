@@ -1,8 +1,11 @@
 ---
-- name: Install req'd dependency
+- name: Install req'd dependencies
   apt:
-    name: "libglapi-mesa"
+    name: "{{ item }}"
     state: "present"
+  loop:
+  - "libglapi-mesa"
+  - "libxdamage1"
 
 - include_tasks: do-install.yml
   loop: "{{ dropbox_install_users }}"
