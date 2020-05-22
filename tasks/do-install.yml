@@ -37,21 +37,21 @@
       msg: "{{ inst_link.stdout_lines[1] | default('NONE FOUND') }}"
     when: (inst_link.stdout_lines | default([])) | length > 0
 
-  - name: "(user {{dropbox_install_user}}) - Cronjob to ensure dropboxd is running"
-    cron:
-      name: "run_dropboxd"
-      minute: "*/5"
-      user: "{{ dropbox_install_user }}"
-      job: "~/.dropbox-dist/dropboxd 2>&1 >> ~/dropboxd.log"
-
-  - name: Ensure dropboxd.log is rotated
-    template:
-      src: "logrotate.dropboxd.j2"
-      dest: "/etc/logrotate.d/dropboxd.{{dropbox_install_user}}"
-      owner: root
-      group: root
-      mode: 0644
-
   when: (ansible_check_mode == false) and (not dbox_inst.stat.exists)
   become: "yes"
   become_user: "{{dropbox_install_user}}"
+
+- name: "(user {{dropbox_install_user}}) - Cronjob to ensure dropboxd is running"
+  cron:
+    name: "run_dropboxd"
+    minute: "*/5"
+    user: "{{ dropbox_install_user }}"
+    job: "~/.dropbox-dist/dropboxd 2>&1 >> ~/dropboxd.log"
+
+- name: Ensure dropboxd.log is rotated
+  template:
+    src: "logrotate.dropboxd.j2"
+    dest: "/etc/logrotate.d/dropboxd.{{dropbox_install_user}}"
+    owner: root
+    group: root
+    mode: 0644
