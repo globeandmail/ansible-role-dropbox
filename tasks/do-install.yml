@@ -46,7 +46,7 @@
     name: "run_dropboxd"
     minute: "*/5"
     user: "{{ dropbox_install_user }}"
-    job: "~/.dropbox-dist/dropboxd 2>&1 >> ~/dropboxd.log"
+    job: "~/.dropbox-dist/dropboxd >> ~/dropboxd.log 2>&1"
 
 - name: Ensure dropboxd.log is rotated
   template:
